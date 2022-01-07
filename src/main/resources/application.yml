@@ -1,0 +1,6 @@
+spring:
+  aop:
+    auto: true
+pxc:
+  datasource:
+    enabled: true
