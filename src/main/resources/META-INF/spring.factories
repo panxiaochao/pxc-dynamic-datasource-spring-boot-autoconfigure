@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  io.github.panxiaochao.config.PxcDynamicDataSourceAutoConfiguration
+  io.github.panxiaochao.db.config.PxcDynamicDataSourceAutoConfiguration
