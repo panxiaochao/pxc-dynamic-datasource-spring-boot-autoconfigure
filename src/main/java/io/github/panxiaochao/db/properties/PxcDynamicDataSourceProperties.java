@@ -18,6 +18,7 @@ import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
 
 import java.io.IOException;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -43,7 +44,7 @@ public class PxcDynamicDataSourceProperties implements InitializingBean {
     private static final ResourcePatternResolver resourceResolver = new PathMatchingResourcePatternResolver();
     private String[] mapperLocations = new String[]{"classpath*:/mapper/**/*.xml"};
     private String typeAliasesPackage;
-    private Map<String, DruidProperties> dynamic;
+    private Map<String, DruidProperties> dynamic = new LinkedHashMap<>();
     private ExecutorType executorType;
     private Class<? extends MetaObjectHandler> metaObjectImpl = MyMetaObjectHandler.class;
     private IdType idType = IdType.AUTO;

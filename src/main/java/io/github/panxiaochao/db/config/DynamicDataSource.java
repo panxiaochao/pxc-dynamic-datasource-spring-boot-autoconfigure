@@ -1,6 +1,7 @@
-package io.github.panxiaochao.db.multiple;
+package io.github.panxiaochao.db.config;
 
 import io.github.panxiaochao.db.enums.DbSourceEnum;
+import io.github.panxiaochao.db.holder.DbSourceContextHolder;
 import io.github.panxiaochao.db.logging.Log;
 import io.github.panxiaochao.db.logging.LogFactory;
 import org.apache.commons.lang3.StringUtils;
@@ -8,7 +9,9 @@ import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;
 
 
 /**
- * @author Mr_LyPxc
+ * 核心动态数据源
+ *
+ * @author Lypxc
  */
 public class DynamicDataSource extends AbstractRoutingDataSource {
 

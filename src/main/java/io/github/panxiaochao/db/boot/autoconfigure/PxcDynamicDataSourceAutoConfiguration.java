@@ -1,4 +1,4 @@
-package io.github.panxiaochao.db.config;
+package io.github.panxiaochao.db.boot.autoconfigure;
 
 import com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceAutoConfigure;
 import com.baomidou.mybatisplus.autoconfigure.SpringBootVFS;
@@ -45,12 +45,13 @@ import java.util.Properties;
  * <p>注意：所以必须在DataSourceAutoConfiguration 和 DruidDataSourceAutoConfigure之前创建！！！
  *
  * @author Lypxc
- * @since 2021-01-05
+ * @since 2022-01-05
  */
 @Configuration
-@ConditionalOnClass({SqlSessionFactory.class})
-@AutoConfigureBefore({DataSourceAutoConfiguration.class, DruidDataSourceAutoConfigure.class})
 @EnableConfigurationProperties(PxcDynamicDataSourceProperties.class)
+@ConditionalOnClass({SqlSessionFactory.class})
+//@AutoConfigureBefore(value = DataSourceAutoConfiguration.class, name = "com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceAutoConfigure")
+@AutoConfigureBefore({DataSourceAutoConfiguration.class, DruidDataSourceAutoConfigure.class})
 @ConditionalOnProperty(prefix = PxcDynamicDataSourceProperties.PXC_DATASOURCE_PREFIX, name = "enabled", havingValue = "true")
 public class PxcDynamicDataSourceAutoConfiguration {
 
