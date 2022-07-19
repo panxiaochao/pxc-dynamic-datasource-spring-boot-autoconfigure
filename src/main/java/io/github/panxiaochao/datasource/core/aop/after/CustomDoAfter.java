@@ -1,6 +1,6 @@
 package io.github.panxiaochao.datasource.core.aop.after;
 
-import io.github.panxiaochao.db.holder.DbSourceContextHolder;
+import io.github.panxiaochao.datasource.core.holder.DynamicDataSourceContextHolder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.aop.AfterReturningAdvice;
@@ -27,7 +27,7 @@ public class CustomDoAfter implements AfterReturningAdvice {
      */
     @Override
     public void afterReturning(Object o, Method method, Object[] args, Object target) {
-        LOGGER.info(">>> after clear datesource " + DbSourceContextHolder.get());
-        DbSourceContextHolder.clear();
+        LOGGER.info(">>> after clear datesource " + DynamicDataSourceContextHolder.get());
+        DynamicDataSourceContextHolder.clear();
     }
 }
