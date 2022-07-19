@@ -7,7 +7,7 @@
     <version>1.0.3</version>
     <name>pxc-dynamic-datasource-spring-boot-autoconfigure</name>
     <url>https://github.com/panxiaochao/pxc-dynamic-datasource-spring-boot-autoconfigure</url>
-    <description>pxc-dynamic-datasource-spring-boot-autoconfigure</description>
+    <description>${project.artifactId}</description>
     <packaging>jar</packaging>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -19,6 +19,7 @@
         <commons-lang3.version>3.12.0</commons-lang3.version>
         <commons-codec.version>1.15</commons-codec.version>
         <druid-spring-boot.version>1.2.11</druid-spring-boot.version>
+        <hikariCp.version>4.0.3</hikariCp.version>
         <mybatis-plus-boot-starter.version>3.5.2</mybatis-plus-boot-starter.version>
         <mybatis-plus-generator.version>3.5.3</mybatis-plus-generator.version>
         <log4j2.version>2.18.0</log4j2.version>
@@ -126,7 +127,7 @@
             <scope>provided</scope>
         </dependency>
 
-        <!-- 多数据源配置 druid -->
+        <!-- druid -->
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>druid-spring-boot-starter</artifactId>
@@ -141,6 +142,13 @@
                     <groupId>org.springframework.boot</groupId>
                 </exclusion>
             </exclusions>
+        </dependency>
+        <!-- HikariCP jdk8-->
+        <dependency>
+            <groupId>com.zaxxer</groupId>
+            <artifactId>HikariCP</artifactId>
+            <version>${hikariCp.version}</version>
+            <scope>provided</scope>
         </dependency>
 
         <!-- mybatis-plus-boot -->
