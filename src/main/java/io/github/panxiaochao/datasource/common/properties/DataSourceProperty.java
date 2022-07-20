@@ -1,5 +1,9 @@
 package io.github.panxiaochao.datasource.common.properties;
 
+import io.github.panxiaochao.datasource.config.druid.DruidConfig;
+import io.github.panxiaochao.datasource.config.hikari.HikariCpConfig;
+import org.springframework.boot.context.properties.NestedConfigurationProperty;
+
 import javax.sql.DataSource;
 
 /**
@@ -10,12 +14,20 @@ import javax.sql.DataSource;
  * @since 2022/7/18
  */
 public class DataSourceProperty {
+    /**
+     * 连接池名字
+     */
     private String poolName;
     private String driverClassName;
     private String url;
     private String username;
     private String password;
     private Class<? extends DataSource> type;
+
+    @NestedConfigurationProperty
+    private DruidConfig druid = new DruidConfig();
+    @NestedConfigurationProperty
+    private HikariCpConfig hikari = new HikariCpConfig();
 
     public String getPoolName() {
         return poolName;
@@ -63,5 +75,21 @@ public class DataSourceProperty {
 
     public void setType(Class<? extends DataSource> type) {
         this.type = type;
+    }
+
+    public DruidConfig getDruid() {
+        return druid;
+    }
+
+    public void setDruid(DruidConfig druid) {
+        this.druid = druid;
+    }
+
+    public HikariCpConfig getHikari() {
+        return hikari;
+    }
+
+    public void setHikari(HikariCpConfig hikari) {
+        this.hikari = hikari;
     }
 }

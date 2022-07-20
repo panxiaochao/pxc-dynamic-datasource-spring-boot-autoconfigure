@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.panxiaochao.datasource.config.builder;
+package io.github.panxiaochao.datasource.config.creator;
 
 import io.github.panxiaochao.datasource.common.properties.DataSourceProperty;
 
@@ -26,7 +26,7 @@ import javax.sql.DataSource;
  * @author Lypxc
  * @since 2022/7/18
  */
-public interface DataSourceBuilder {
+public interface DataSourceCreator {
 
 
     /**

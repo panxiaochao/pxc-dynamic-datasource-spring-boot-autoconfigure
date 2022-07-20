@@ -1,7 +1,6 @@
-package io.github.panxiaochao.datasource.config.builder;
+package io.github.panxiaochao.datasource.config.creator;
 
 import com.alibaba.druid.pool.DruidDataSource;
-import com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceBuilder;
 import com.zaxxer.hikari.HikariDataSource;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -20,22 +19,22 @@ import java.util.List;
  * @since 2022/7/18
  */
 @Configuration
-public class DynamicDataSourceBuilderConfigure {
+public class DynamicDataSourceCreatorConfigure {
 
     public static final int ORDER_DRUID = 2000;
     public static final int ORDER_HIKARI = 3000;
 
     /**
-     * @param dataSourceBuilders
+     * @param dataSourceCreators
      * @return
      */
     @Primary
     @Bean
     @ConditionalOnMissingBean
-    public DefaultDataSourceBuilder dataSourceCreator(List<DataSourceBuilder> dataSourceBuilders) {
-        DefaultDataSourceBuilder defaultDataSourceBuilder = new DefaultDataSourceBuilder();
-        defaultDataSourceBuilder.setBuilders(dataSourceBuilders);
-        return defaultDataSourceBuilder;
+    public DefaultDataSourceCreator dataSourceCreator(List<DataSourceCreator> dataSourceCreators) {
+        DefaultDataSourceCreator defaultDataSourceCreator = new DefaultDataSourceCreator();
+        defaultDataSourceCreator.setBuilders(dataSourceCreators);
+        return defaultDataSourceCreator;
     }
 
     /**
@@ -43,7 +42,7 @@ public class DynamicDataSourceBuilderConfigure {
      */
     @ConditionalOnClass(DruidDataSource.class)
     @Configuration
-    static class DruidDataSourceBuildConfiguration {
+    static class DruidDataSourceCreatorConfiguration {
         /**
          * 采用内部类
          *
@@ -51,8 +50,8 @@ public class DynamicDataSourceBuilderConfigure {
          */
         @Bean
         @Order(ORDER_DRUID)
-        public DruidDataSourceBuilder druidDataSourceBuilder() {
-            return new DruidDataSourceBuilder();
+        public DruidDataSourceCreator druidDataSourceBuilder() {
+            return new DruidDataSourceCreator();
         }
     }
 
@@ -69,8 +68,8 @@ public class DynamicDataSourceBuilderConfigure {
          */
         @Bean
         @Order(ORDER_HIKARI)
-        public HikariDataSourceBuilder hikariDataSourceBuilder() {
-            return new HikariDataSourceBuilder();
+        public HikariDataSourceCreator hikariDataSourceBuilder() {
+            return new HikariDataSourceCreator();
         }
     }
 }

@@ -1,4 +1,4 @@
-package io.github.panxiaochao.datasource.config.builder;
+package io.github.panxiaochao.datasource.config.creator;
 
 import io.github.panxiaochao.datasource.common.properties.DataSourceProperty;
 import org.springframework.util.Assert;
@@ -13,15 +13,15 @@ import java.util.List;
  * @author Lypxc
  * @since 2022/7/18
  */
-public class DefaultDataSourceBuilder {
+public class DefaultDataSourceCreator {
 
-    private List<DataSourceBuilder> builders;
+    private List<DataSourceCreator> builders;
 
-    public List<DataSourceBuilder> getBuilders() {
+    public List<DataSourceCreator> getBuilders() {
         return builders;
     }
 
-    public void setBuilders(List<DataSourceBuilder> builders) {
+    public void setBuilders(List<DataSourceCreator> builders) {
         this.builders = builders;
     }
 
@@ -32,14 +32,14 @@ public class DefaultDataSourceBuilder {
      * @return
      */
     public DataSource buildDataSource(DataSourceProperty dataSourceProperty) {
-        DataSourceBuilder dataSourceBuilder = null;
-        for (DataSourceBuilder builder : this.builders) {
+        DataSourceCreator dataSourceCreator = null;
+        for (DataSourceCreator builder : this.builders) {
             if (builder.support(dataSourceProperty)) {
-                dataSourceBuilder = builder;
+                dataSourceCreator = builder;
                 break;
             }
         }
-        Assert.notNull(dataSourceBuilder, "dataSourceBuilder must not be null !");
-        return dataSourceBuilder.buildDataSource(dataSourceProperty);
+        Assert.notNull(dataSourceCreator, "dataSourceCreator must not be null !");
+        return dataSourceCreator.buildDataSource(dataSourceProperty);
     }
 }

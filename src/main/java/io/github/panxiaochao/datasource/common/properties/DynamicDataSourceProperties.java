@@ -1,7 +1,7 @@
 package io.github.panxiaochao.datasource.common.properties;
 
 import io.github.panxiaochao.datasource.config.druid.DruidConfig;
-import io.github.panxiaochao.datasource.config.hikari.HikariConfig;
+import io.github.panxiaochao.datasource.config.hikari.HikariCpConfig;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.NestedConfigurationProperty;
 
@@ -25,7 +25,7 @@ public class DynamicDataSourceProperties {
     @NestedConfigurationProperty
     private DruidConfig druid = new DruidConfig();
     @NestedConfigurationProperty
-    private HikariConfig hikari = new HikariConfig();
+    private HikariCpConfig hikari = new HikariCpConfig();
 
 
     public Map<String, DataSourceProperty> getDynamic() {
@@ -44,11 +44,11 @@ public class DynamicDataSourceProperties {
         this.druid = druid;
     }
 
-    public HikariConfig getHikari() {
+    public HikariCpConfig getHikari() {
         return hikari;
     }
 
-    public void setHikari(HikariConfig hikari) {
+    public void setHikari(HikariCpConfig hikari) {
         this.hikari = hikari;
     }
 }

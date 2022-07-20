@@ -10,7 +10,7 @@ import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerIntercept
 import com.baomidou.mybatisplus.extension.spring.MybatisSqlSessionFactoryBean;
 import io.github.panxiaochao.datasource.common.properties.DsProperties;
 import io.github.panxiaochao.datasource.common.properties.DynamicDataSourceProperties;
-import io.github.panxiaochao.datasource.config.builder.DynamicDataSourceBuilderConfigure;
+import io.github.panxiaochao.datasource.config.creator.DynamicDataSourceCreatorConfigure;
 import io.github.panxiaochao.datasource.config.datasource.DynamicDataSourceWrapper;
 import io.github.panxiaochao.datasource.config.druid.DynamicDruidDataSourceConfigure;
 import io.github.panxiaochao.datasource.core.aop.CustomDefaultPointcutAdvisor;
@@ -62,7 +62,7 @@ import java.util.stream.Stream;
 @EnableConfigurationProperties({DsProperties.class, DynamicDataSourceProperties.class})
 @ConditionalOnClass({SqlSessionFactory.class})
 @AutoConfigureBefore(value = DataSourceAutoConfiguration.class, name = "com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceAutoConfigure")
-@Import(value = {DynamicDruidDataSourceConfigure.class, DynamicDataSourceBuilderConfigure.class})
+@Import(value = {DynamicDruidDataSourceConfigure.class, DynamicDataSourceCreatorConfigure.class})
 @ConditionalOnProperty(prefix = DsProperties.PXC_DATASOURCE_PREFIX, name = "enabled", havingValue = "true", matchIfMissing = true)
 public class PxcDynamicDataSourceAutoConfiguration {
 
@@ -85,7 +85,7 @@ public class PxcDynamicDataSourceAutoConfiguration {
      * @return
      */
     @Bean
-    public DataSourceFactory ymlDynamicDataSourceProvider() {
+    public DataSourceFactory ymlDynamicDataSourceBean() {
         return new YmlDynamicDataSourceBean(dynamicDataSourceProperties.getDynamic());
     }
 
