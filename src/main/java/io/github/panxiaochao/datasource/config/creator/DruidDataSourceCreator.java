@@ -8,6 +8,7 @@ import com.alibaba.druid.filter.logging.Slf4jLogFilter;
 import com.alibaba.druid.pool.DruidDataSource;
 import com.alibaba.druid.wall.WallConfig;
 import com.alibaba.druid.wall.WallFilter;
+import io.github.panxiaochao.datasource.common.constant.DruidConstant;
 import io.github.panxiaochao.datasource.common.exception.DsException;
 import io.github.panxiaochao.datasource.common.properties.DataSourceProperty;
 import io.github.panxiaochao.datasource.common.properties.DynamicDataSourceProperties;
@@ -71,22 +72,23 @@ public class DruidDataSourceCreator implements DataSourceCreator, InitializingBe
         if (StringUtils.isNotBlank(driverClassName)) {
             dataSource.setDriverClassName(driverClassName);
         }
-        DruidConfig config = dataSourceProperty.getDruid();
-        Properties properties = config.toProperties(druidConfig);
-        List<Filter> proxyFilters = this.initFilters(dataSourceProperty, properties.getProperty("druid.filters"));
+        DruidConfig localConfig = dataSourceProperty.getDruid();
+        Properties properties = localConfig.toProperties(druidConfig);
+        // 处理filter过滤器
+        List<Filter> proxyFilters = this.initFilters(dataSourceProperty, properties.getProperty(DruidConstant.FILTERS));
         dataSource.setProxyFilters(proxyFilters);
-
+        // Properties 转化为 DruidDataSource属性
         dataSource.configFromPropety(properties);
         //连接参数单独设置
-        dataSource.setConnectProperties(config.getConnectionProperties());
+        dataSource.setConnectProperties(localConfig.getConnectionProperties());
         //设置druid内置properties不支持的的参数，额外参数
-        this.setParam(dataSource, config);
+        this.setParam(dataSource, localConfig);
 
         //if (Boolean.FALSE.equals(dataSourceProperty.getLazy())) {
         try {
             dataSource.init();
         } catch (SQLException e) {
-            throw new DsException("druid create error", e);
+            throw new DsException("buildDataSource create druid dataSource error", e);
         }
         //}
         return dataSource;

@@ -1,6 +1,5 @@
 package io.github.panxiaochao.datasource.core.route;
 
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.jdbc.datasource.AbstractDataSource;
 
 import javax.sql.DataSource;
@@ -14,7 +13,7 @@ import java.sql.SQLException;
  * @author Lypxc
  * @since 2022/7/18
  */
-public abstract class AbstractCustomRoutingDataSource extends AbstractDataSource implements InitializingBean {
+public abstract class AbstractDynamicRoutingDataSource extends AbstractDataSource {
 
     /**
      * 连接对象
@@ -41,9 +40,5 @@ public abstract class AbstractCustomRoutingDataSource extends AbstractDataSource
     @Override
     public boolean isWrapperFor(Class<?> iFace) throws SQLException {
         return iFace.isInstance(this) || determineTargetDataSource().isWrapperFor(iFace);
-    }
-
-    @Override
-    public void afterPropertiesSet() {
     }
 }

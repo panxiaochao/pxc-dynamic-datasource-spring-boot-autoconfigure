@@ -50,7 +50,7 @@ public class DynamicDataSourceCreatorConfigure {
          */
         @Bean
         @Order(ORDER_DRUID)
-        public DruidDataSourceCreator druidDataSourceBuilder() {
+        public DruidDataSourceCreator druidDataSourceCreator() {
             return new DruidDataSourceCreator();
         }
     }
@@ -68,7 +68,7 @@ public class DynamicDataSourceCreatorConfigure {
          */
         @Bean
         @Order(ORDER_HIKARI)
-        public HikariDataSourceCreator hikariDataSourceBuilder() {
+        public HikariDataSourceCreator hikariDataSourceCreator() {
             return new HikariDataSourceCreator();
         }
     }

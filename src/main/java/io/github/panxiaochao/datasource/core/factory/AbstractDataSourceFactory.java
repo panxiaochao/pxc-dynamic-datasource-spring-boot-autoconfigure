@@ -16,7 +16,7 @@ import java.util.Map;
  * @author Lypxc
  * @since 2022/7/18
  */
-public abstract class AbstractDataSourceFactory implements DataSourceFactory {
+public abstract class AbstractDataSourceFactory implements DynamicDataSourceBean {
 
     @Autowired
     private DefaultDataSourceCreator defaultDataSourceBuilder;

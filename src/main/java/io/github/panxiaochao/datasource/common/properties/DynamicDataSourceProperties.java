@@ -27,7 +27,6 @@ public class DynamicDataSourceProperties {
     @NestedConfigurationProperty
     private HikariCpConfig hikari = new HikariCpConfig();
 
-
     public Map<String, DataSourceProperty> getDynamic() {
         return dynamic;
     }
