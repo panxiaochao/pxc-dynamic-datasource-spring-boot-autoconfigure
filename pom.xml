@@ -30,6 +30,7 @@
         <log4j.version>1.2.17</log4j.version>
         <slf4j-api.version>2.0.1</slf4j-api.version>
         <slf4j-log4j12.version>2.0.1</slf4j-log4j12.version>
+        <lombok.version>1.18.24</lombok.version>
     </properties>
     <dependencies>
         <dependency>
@@ -319,6 +320,14 @@
                     <groupId>org.slf4j</groupId>
                 </exclusion>
             </exclusions>
+        </dependency>
+
+        <!-- lombok -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>${lombok.version}</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 

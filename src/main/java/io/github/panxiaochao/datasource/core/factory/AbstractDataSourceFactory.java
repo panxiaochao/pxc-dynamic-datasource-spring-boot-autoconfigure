@@ -3,8 +3,8 @@ package io.github.panxiaochao.datasource.core.factory;
 import io.github.panxiaochao.datasource.common.properties.DataSourceProperty;
 import io.github.panxiaochao.datasource.config.creator.DefaultDataSourceCreator;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.annotation.Resource;
 import javax.sql.DataSource;
 import java.util.HashMap;
 import java.util.Map;
@@ -18,7 +18,7 @@ import java.util.Map;
  */
 public abstract class AbstractDataSourceFactory implements DynamicDataSourceBean {
 
-    @Autowired
+    @Resource
     private DefaultDataSourceCreator defaultDataSourceBuilder;
 
     protected Map<String, DataSource> buildDataSourceMap(Map<String, DataSourceProperty> dataSourcePropertiesMap) {

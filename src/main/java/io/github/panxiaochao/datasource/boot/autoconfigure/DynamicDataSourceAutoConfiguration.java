@@ -29,7 +29,7 @@ import javax.sql.DataSource;
  * <p>注意：所以必须在DataSourceAutoConfiguration 和 DruidDataSourceAutoConfigure之前创建！！！
  * <p>@AutoConfigureBefore({DataSourceAutoConfiguration.class, DruidDataSourceAutoConfigure.class})
  *
- * <p>ADD: 2022-07-20
+ * <p>UPDATE: 2022-07-20
  * <p>本次加入多数据驱动创建，druid和hikari驱动
  *
  * @author Lypxc
@@ -51,6 +51,8 @@ public class DynamicDataSourceAutoConfiguration {
     }
 
     /**
+     * 创建数据源Bean
+     *
      * @return DynamicDataSourceBean
      */
     @Bean
@@ -59,7 +61,9 @@ public class DynamicDataSourceAutoConfiguration {
     }
 
     /**
-     * @return
+     * 创建数据源
+     *
+     * @return DataSource
      */
     @Bean
     @ConditionalOnMissingBean

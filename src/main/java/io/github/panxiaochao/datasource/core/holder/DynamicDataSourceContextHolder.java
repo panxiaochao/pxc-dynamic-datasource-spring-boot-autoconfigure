@@ -4,9 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author Mr_LyPxc
+ * 切换数据源工具上下文类
+ *
+ * @author Lypxc
  */
 public class DynamicDataSourceContextHolder {
+    /**
+     * TODO: 后续需要增加线程传递性
+     */
     private static final ThreadLocal<String> CONTEXT_HOLDER = new ThreadLocal<>();
     public static final List<String> DATA_SOURCE_LIST = new ArrayList<>();
 

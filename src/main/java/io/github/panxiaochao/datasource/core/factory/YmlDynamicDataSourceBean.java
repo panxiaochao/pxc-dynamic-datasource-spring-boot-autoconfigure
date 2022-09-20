@@ -7,7 +7,7 @@ import java.util.Map;
 
 /**
  * {@code YmlDynamicDataSourceBean}
- * <p>
+ * <p> 通过YML加载数据库源信息
  *
  * @author Lypxc
  * @since 2022/7/19

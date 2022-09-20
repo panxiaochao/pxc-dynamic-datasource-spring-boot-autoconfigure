@@ -15,7 +15,7 @@ import org.springframework.context.annotation.Import;
 
 /**
  * {@code DynamicDruidDataSourceConfigure}
- * <p> 复制Druid配置文件改造
+ * <p> 复制Druid配置文件改造，可以查看DruidDataSourceAutoConfigure.class源文件
  *
  * @author Lypxc
  * @since 2022/7/18

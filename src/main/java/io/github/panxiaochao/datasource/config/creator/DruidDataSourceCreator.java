@@ -235,6 +235,6 @@ public class DruidDataSourceCreator implements DataSourceCreator, InitializingBe
     @Override
     public void afterPropertiesSet() throws Exception {
         // 先获取属性
-        this.druidConfig = dataSourceProperties.getDruid();
+        druidConfig = dataSourceProperties.getDruid();
     }
 }

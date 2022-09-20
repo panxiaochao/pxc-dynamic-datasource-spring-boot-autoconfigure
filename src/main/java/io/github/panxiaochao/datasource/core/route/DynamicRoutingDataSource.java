@@ -20,7 +20,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * {@code DynamicRoutingDataSource}
- * <p>
+ * <p> 核心组件，动态数据源
  *
  * @author Lypxc
  * @since 2022/7/20
@@ -33,6 +33,9 @@ public class DynamicRoutingDataSource extends AbstractDynamicRoutingDataSource i
      */
     private final Map<String, DataSource> dataSourceMap = new ConcurrentHashMap<>();
 
+    /**
+     * 加载数据源的动态信息
+     */
     private List<DynamicDataSourceBean> dynamicDataSourceBeans;
 
     public DynamicRoutingDataSource() {
@@ -63,22 +66,23 @@ public class DynamicRoutingDataSource extends AbstractDynamicRoutingDataSource i
         if (StringUtils.isEmpty(ds)) {
             return determinePrimaryDataSource();
         } else if (dataSourceMap.containsKey(ds)) {
-            LOGGER.info("dynamic-datasource switch to the datasource named [{}]", ds);
+            LOGGER.info("dynamic datasource switch to the datasource named [{}]", ds);
             return dataSourceMap.get(ds);
         }
         return determinePrimaryDataSource();
     }
 
     /**
+     * 获取默认数据源，默认 Master
+     *
      * @return
      */
     private DataSource determinePrimaryDataSource() {
-        LOGGER.info("dynamic-datasource switch to the primary datasource");
         DataSource dataSource = dataSourceMap.get(DsEnum.MASTER.name());
-        if (dataSource != null) {
-            return dataSource;
+        if (dataSource == null) {
+            throw new DsException("dynamic datasource can not find primary Master datasource");
         }
-        throw new DsException("dynamic-datasource can not find primary datasource");
+        return dataSource;
     }
 
     /**
@@ -93,7 +97,7 @@ public class DynamicRoutingDataSource extends AbstractDynamicRoutingDataSource i
         if (oldDataSource != null) {
             closeDataSource(ds, oldDataSource);
         }
-        LOGGER.info("dynamic-datasource - add a datasource named [{}] success", ds);
+        LOGGER.info("dynamic datasource - add a datasource named [{}] success", ds);
     }
 
     /**
@@ -109,13 +113,13 @@ public class DynamicRoutingDataSource extends AbstractDynamicRoutingDataSource i
                 closeMethod.invoke(dataSource);
             }
         } catch (Exception e) {
-            LOGGER.warn("dynamic-datasource closed datasource named [{}] failed", ds, e);
+            LOGGER.warn("dynamic datasource closed datasource named [{}] failed", ds, e);
         }
     }
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        // 添加并分组数据源
+        // 添加数据源
         Map<String, DataSource> dataSources = new HashMap<>(16);
         for (DynamicDataSourceBean dynamicDataSourceBean : dynamicDataSourceBeans) {
             dataSources.putAll(dynamicDataSourceBean.loadDataSource());
@@ -125,9 +129,9 @@ public class DynamicRoutingDataSource extends AbstractDynamicRoutingDataSource i
         }
         // 检测默认数据源是否设置
         if (dataSourceMap.containsKey(DsEnum.MASTER.name())) {
-            LOGGER.info("dynamic-datasource initial loaded [{}] datasource,primary datasource named [{}]", dataSources.size(), DsEnum.MASTER.name());
+            LOGGER.info("dynamic datasource initial loaded [{}] datasource, primary datasource named [{}]", dataSources.size(), DsEnum.MASTER.name());
         } else {
-            LOGGER.warn("dynamic-datasource initial loaded [{}] datasource,Please add your primary datasource or check your configuration", dataSources.size());
+            throw new DsException("dynamic datasource can not find primary Master datasource");
         }
     }
 
