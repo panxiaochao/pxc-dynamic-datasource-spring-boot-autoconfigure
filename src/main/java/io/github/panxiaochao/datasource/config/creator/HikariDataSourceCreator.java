@@ -3,15 +3,16 @@ package io.github.panxiaochao.datasource.config.creator;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import io.github.panxiaochao.datasource.common.properties.DataSourceProperty;
+import io.github.panxiaochao.datasource.common.properties.DynamicDataSourceProperties;
 import io.github.panxiaochao.datasource.config.hikari.HikariCpConfig;
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 
+import javax.annotation.Resource;
 import javax.sql.DataSource;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Properties;
 
 /**
  * {@code HikariDataSourceBuilder}
@@ -21,9 +22,16 @@ import java.lang.reflect.Method;
  * @since 2022/7/18
  */
 public class HikariDataSourceCreator implements DataSourceCreator, InitializingBean {
-    private static final Logger LOGGER = LoggerFactory.getLogger(HikariDataSourceCreator.class);
 
     private static Method CONFIG_COPY_METHOD = null;
+
+    @Resource
+    protected DynamicDataSourceProperties dataSourceProperties;
+
+    /**
+     * HikariCp数据源
+     */
+    private static final String HIKARI_DATASOURCE = "com.zaxxer.hikari.HikariDataSource";
 
     private HikariCpConfig hikariCpConfig;
 
@@ -61,18 +69,27 @@ public class HikariDataSourceCreator implements DataSourceCreator, InitializingB
      */
     @Override
     public DataSource buildDataSource(DataSourceProperty dataSourceProperty) {
-        HikariConfig config = new HikariConfig();
+        // 转换本地属性
+        HikariCpConfig localConfig = dataSourceProperty.getHikari();
+        Properties properties = localConfig.toProperties(hikariCpConfig);
+        HikariConfig config = new HikariConfig(properties);
         config.setUsername(dataSourceProperty.getUsername());
         config.setPassword(dataSourceProperty.getPassword());
         config.setJdbcUrl(dataSourceProperty.getUrl());
-        config.setPoolName(dataSourceProperty.getPoolName());
+        if (StringUtils.isBlank(config.getPoolName())) {
+            config.setPoolName(dataSourceProperty.getPoolName());
+        }
         String driverClassName = dataSourceProperty.getDriverClassName();
         if (StringUtils.isNotBlank(driverClassName)) {
             config.setDriverClassName(driverClassName);
         }
-        //if (Boolean.FALSE.equals(dataSourceProperty.getLazy())) {
-        //    return new HikariDataSource(config);
-        //}
+        // 额外属性操作
+        if (localConfig.getDataSourceProperties() != null) {
+            config.setDataSourceProperties(localConfig.getDataSourceProperties());
+        }
+        if (localConfig.getHealthCheckProperties() != null) {
+            config.setHealthCheckProperties(localConfig.getHealthCheckProperties());
+        }
         config.validate();
         HikariDataSource dataSource = new HikariDataSource();
         try {
@@ -91,11 +108,12 @@ public class HikariDataSourceCreator implements DataSourceCreator, InitializingB
      */
     @Override
     public boolean support(DataSourceProperty dataSourceProperty) {
-        return false;
+        Class<? extends DataSource> type = dataSourceProperty.getType();
+        return type == null || HIKARI_DATASOURCE.equals(type.getName());
     }
 
     @Override
     public void afterPropertiesSet() throws Exception {
-
+        hikariCpConfig = dataSourceProperties.getHikari();
     }
 }

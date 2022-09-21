@@ -1,6 +1,7 @@
 package io.github.panxiaochao.datasource.core.factory;
 
 import io.github.panxiaochao.datasource.common.properties.DataSourceProperty;
+import lombok.RequiredArgsConstructor;
 
 import javax.sql.DataSource;
 import java.util.Map;
@@ -12,13 +13,10 @@ import java.util.Map;
  * @author Lypxc
  * @since 2022/7/19
  */
+@RequiredArgsConstructor
 public class YmlDynamicDataSourceBean extends AbstractDataSourceFactory {
 
     private final Map<String, DataSourceProperty> dataSourcePropertiesMap;
-
-    public YmlDynamicDataSourceBean(Map<String, DataSourceProperty> dataSourcePropertiesMap) {
-        this.dataSourcePropertiesMap = dataSourcePropertiesMap;
-    }
 
     /**
      * 加载数据库

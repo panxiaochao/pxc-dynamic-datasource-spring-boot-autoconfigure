@@ -1,5 +1,8 @@
 package io.github.panxiaochao.datasource.config.hikari;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.Properties;
 
 
@@ -8,6 +11,8 @@ import java.util.Properties;
  *
  * @author Lypxc
  */
+@Setter
+@Getter
 public class HikariCpConfig {
 
     private String catalog;
@@ -17,8 +22,9 @@ public class HikariCpConfig {
     private Long leakDetectionThreshold;
     private Long maxLifetime;
     private Integer maxPoolSize;
+    private Integer maximumPoolSize;
     private Integer minIdle;
-    //
+    private Integer minimumIdle;
     private Long initializationFailTimeout;
     private String connectionInitSql;
     private String connectionTestQuery;
@@ -32,209 +38,138 @@ public class HikariCpConfig {
     private Boolean isAllowPoolSuspension;
     private Properties dataSourceProperties;
     private Properties healthCheckProperties;
-    //
+    private String poolName;
     private String schema;
     private String exceptionOverrideClassName;
     private Long keepaliveTime;
     private Boolean sealed;
 
-    public String getCatalog() {
-        return catalog;
+    public void setMaximumPoolSize(Integer maximumPoolSize) {
+        this.maxPoolSize = maximumPoolSize;
     }
 
-    public void setCatalog(String catalog) {
-        this.catalog = catalog;
+    public void setMinimumIdle(Integer minimumIdle) {
+        this.minIdle = minimumIdle;
     }
 
-    public Long getConnectionTimeout() {
-        return connectionTimeout;
-    }
-
-    public void setConnectionTimeout(Long connectionTimeout) {
-        this.connectionTimeout = connectionTimeout;
-    }
-
-    public Long getValidationTimeout() {
-        return validationTimeout;
-    }
-
-    public void setValidationTimeout(Long validationTimeout) {
-        this.validationTimeout = validationTimeout;
-    }
-
-    public Long getIdleTimeout() {
-        return idleTimeout;
-    }
-
-    public void setIdleTimeout(Long idleTimeout) {
-        this.idleTimeout = idleTimeout;
-    }
-
-    public Long getLeakDetectionThreshold() {
-        return leakDetectionThreshold;
-    }
-
-    public void setLeakDetectionThreshold(Long leakDetectionThreshold) {
-        this.leakDetectionThreshold = leakDetectionThreshold;
-    }
-
-    public Long getMaxLifetime() {
-        return maxLifetime;
-    }
-
-    public void setMaxLifetime(Long maxLifetime) {
-        this.maxLifetime = maxLifetime;
-    }
-
-    public Integer getMaxPoolSize() {
-        return maxPoolSize;
-    }
-
-    public void setMaxPoolSize(Integer maxPoolSize) {
-        this.maxPoolSize = maxPoolSize;
-    }
-
-    public Integer getMinIdle() {
-        return minIdle;
-    }
-
-    public void setMinIdle(Integer minIdle) {
-        this.minIdle = minIdle;
-    }
-
-    public Long getInitializationFailTimeout() {
-        return initializationFailTimeout;
-    }
-
-    public void setInitializationFailTimeout(Long initializationFailTimeout) {
-        this.initializationFailTimeout = initializationFailTimeout;
-    }
-
-    public String getConnectionInitSql() {
-        return connectionInitSql;
-    }
-
-    public void setConnectionInitSql(String connectionInitSql) {
-        this.connectionInitSql = connectionInitSql;
-    }
-
-    public String getConnectionTestQuery() {
-        return connectionTestQuery;
-    }
-
-    public void setConnectionTestQuery(String connectionTestQuery) {
-        this.connectionTestQuery = connectionTestQuery;
-    }
-
-    public String getDataSourceClassName() {
-        return dataSourceClassName;
-    }
-
-    public void setDataSourceClassName(String dataSourceClassName) {
-        this.dataSourceClassName = dataSourceClassName;
-    }
-
-    public String getDataSourceJndiName() {
-        return dataSourceJndiName;
-    }
-
-    public void setDataSourceJndiName(String dataSourceJndiName) {
-        this.dataSourceJndiName = dataSourceJndiName;
-    }
-
-    public String getTransactionIsolationName() {
-        return transactionIsolationName;
-    }
-
-    public void setTransactionIsolationName(String transactionIsolationName) {
-        this.transactionIsolationName = transactionIsolationName;
-    }
-
-    public Boolean getAutoCommit() {
-        return isAutoCommit;
-    }
-
-    public void setAutoCommit(Boolean autoCommit) {
-        isAutoCommit = autoCommit;
-    }
-
-    public Boolean getReadOnly() {
-        return isReadOnly;
-    }
-
-    public void setReadOnly(Boolean readOnly) {
-        isReadOnly = readOnly;
-    }
-
-    public Boolean getIsolateInternalQueries() {
-        return isIsolateInternalQueries;
-    }
-
-    public void setIsolateInternalQueries(Boolean isolateInternalQueries) {
-        isIsolateInternalQueries = isolateInternalQueries;
-    }
-
-    public Boolean getRegisterMbeans() {
-        return isRegisterMbeans;
-    }
-
-    public void setRegisterMbeans(Boolean registerMbeans) {
-        isRegisterMbeans = registerMbeans;
-    }
-
-    public Boolean getAllowPoolSuspension() {
-        return isAllowPoolSuspension;
-    }
-
-    public void setAllowPoolSuspension(Boolean allowPoolSuspension) {
-        isAllowPoolSuspension = allowPoolSuspension;
-    }
-
-    public Properties getDataSourceProperties() {
-        return dataSourceProperties;
-    }
-
-    public void setDataSourceProperties(Properties dataSourceProperties) {
-        this.dataSourceProperties = dataSourceProperties;
-    }
-
-    public Properties getHealthCheckProperties() {
-        return healthCheckProperties;
-    }
-
-    public void setHealthCheckProperties(Properties healthCheckProperties) {
-        this.healthCheckProperties = healthCheckProperties;
-    }
-
-    public String getSchema() {
-        return schema;
-    }
-
-    public void setSchema(String schema) {
-        this.schema = schema;
-    }
-
-    public String getExceptionOverrideClassName() {
-        return exceptionOverrideClassName;
-    }
-
-    public void setExceptionOverrideClassName(String exceptionOverrideClassName) {
-        this.exceptionOverrideClassName = exceptionOverrideClassName;
-    }
-
-    public Long getKeepaliveTime() {
-        return keepaliveTime;
-    }
-
-    public void setKeepaliveTime(Long keepaliveTime) {
-        this.keepaliveTime = keepaliveTime;
-    }
-
-    public Boolean getSealed() {
-        return sealed;
-    }
-
-    public void setSealed(Boolean sealed) {
-        this.sealed = sealed;
+    /**
+     * 根据全局配置和本地配置结合转换为Properties
+     *
+     * @param hikariCpConfig 全局配置
+     * @return hikariCpConfig 配置
+     */
+    public Properties toProperties(HikariCpConfig hikariCpConfig) {
+        Properties properties = new Properties();
+        String catalog = this.catalog == null ? hikariCpConfig.getCatalog() : this.catalog;
+        if (catalog != null && catalog.length() > 0) {
+            properties.setProperty("catalog", catalog);
+        }
+        Long connectionTimeout = this.connectionTimeout == null ? hikariCpConfig.getConnectionTimeout() : this.connectionTimeout;
+        if (connectionTimeout != null) {
+            properties.setProperty("connectionTimeout", String.valueOf(connectionTimeout));
+        }
+        Long validationTimeout = this.connectionTimeout == null ? hikariCpConfig.getValidationTimeout() : this.connectionTimeout;
+        if (validationTimeout != null) {
+            properties.setProperty("validationTimeout", String.valueOf(validationTimeout));
+        }
+        Long idleTimeout = this.idleTimeout == null ? hikariCpConfig.getIdleTimeout() : this.idleTimeout;
+        if (idleTimeout != null) {
+            properties.setProperty("idleTimeout", String.valueOf(idleTimeout));
+        }
+        Long leakDetectionThreshold =
+                this.leakDetectionThreshold == null ? hikariCpConfig.getLeakDetectionThreshold() : this.leakDetectionThreshold;
+        if (leakDetectionThreshold != null) {
+            properties.setProperty("leakDetectionThreshold", String.valueOf(leakDetectionThreshold));
+        }
+        Long maxLifetime = this.maxLifetime == null ? hikariCpConfig.getMaxLifetime() : this.maxLifetime;
+        if (maxLifetime != null) {
+            properties.setProperty("maxLifetime", String.valueOf(maxLifetime));
+        }
+        Integer maxPoolSize = this.maxPoolSize == null ? hikariCpConfig.getMaxPoolSize() : this.maxPoolSize;
+        if (maxPoolSize != null) {
+            properties.setProperty("maxPoolSize", String.valueOf(maxPoolSize));
+        }
+        // 需要设置 maxPoolSize
+        Integer maximumPoolSize = this.maximumPoolSize == null ? hikariCpConfig.getMaximumPoolSize() : this.maximumPoolSize;
+        if (maximumPoolSize != null) {
+            properties.setProperty("maxPoolSize", String.valueOf(maximumPoolSize));
+        }
+        Integer minIdle = this.minIdle == null ? hikariCpConfig.getMinIdle() : this.minIdle;
+        if (minIdle != null) {
+            properties.setProperty("minIdle", String.valueOf(minIdle));
+        }
+        // 需要设置 minIdle
+        Integer minimumIdle = this.minimumIdle == null ? hikariCpConfig.getMinimumIdle() : this.minimumIdle;
+        if (minimumIdle != null) {
+            properties.setProperty("minIdle", String.valueOf(minimumIdle));
+        }
+        Long initializationFailTimeout =
+                this.initializationFailTimeout == null ? hikariCpConfig.getInitializationFailTimeout() : this.initializationFailTimeout;
+        if (initializationFailTimeout != null) {
+            properties.setProperty("initializationFailTimeout", String.valueOf(initializationFailTimeout));
+        }
+        String connectionInitSql =
+                this.connectionInitSql == null ? hikariCpConfig.getConnectionInitSql() : this.connectionInitSql;
+        if (connectionInitSql != null && connectionInitSql.length() > 0) {
+            properties.setProperty("connectionInitSql", connectionInitSql);
+        }
+        String connectionTestQuery =
+                this.connectionTestQuery == null ? hikariCpConfig.getConnectionTestQuery() : this.connectionTestQuery;
+        if (connectionTestQuery != null && connectionTestQuery.length() > 0) {
+            properties.setProperty("connectionTestQuery", connectionTestQuery);
+        }
+        String dataSourceClassName = this.dataSourceClassName == null ? hikariCpConfig.getDataSourceClassName() : this.dataSourceClassName;
+        if (dataSourceClassName != null && dataSourceClassName.length() > 0) {
+            properties.setProperty("dataSourceClassName", dataSourceClassName);
+        }
+        String dataSourceJndiName = this.dataSourceJndiName == null ? hikariCpConfig.getDataSourceJndiName() : this.dataSourceJndiName;
+        if (dataSourceJndiName != null && dataSourceJndiName.length() > 0) {
+            properties.setProperty("dataSourceJndiName", dataSourceJndiName);
+        }
+        String transactionIsolationName = this.transactionIsolationName == null ? hikariCpConfig.getTransactionIsolationName() : this.transactionIsolationName;
+        if (transactionIsolationName != null && transactionIsolationName.length() > 0) {
+            properties.setProperty("transactionIsolationName", transactionIsolationName);
+        }
+        Boolean isAutoCommit = this.isAutoCommit == null ? hikariCpConfig.getIsAutoCommit() : this.isAutoCommit;
+        if (isAutoCommit != null) {
+            properties.setProperty("isAutoCommit", isAutoCommit.toString());
+        }
+        Boolean isReadOnly = this.isReadOnly == null ? hikariCpConfig.getIsReadOnly() : this.isReadOnly;
+        if (isReadOnly != null) {
+            properties.setProperty("isReadOnly", isReadOnly.toString());
+        }
+        Boolean isIsolateInternalQueries = this.isIsolateInternalQueries == null ? hikariCpConfig.getIsIsolateInternalQueries() : this.isIsolateInternalQueries;
+        if (isIsolateInternalQueries != null) {
+            properties.setProperty("isIsolateInternalQueries", isIsolateInternalQueries.toString());
+        }
+        Boolean isRegisterMbeans = this.isRegisterMbeans == null ? hikariCpConfig.getIsRegisterMbeans() : this.isRegisterMbeans;
+        if (isRegisterMbeans != null) {
+            properties.setProperty("isRegisterMbeans", isRegisterMbeans.toString());
+        }
+        Boolean isAllowPoolSuspension = this.isAllowPoolSuspension == null ? hikariCpConfig.getIsAllowPoolSuspension() : this.isAllowPoolSuspension;
+        if (isAllowPoolSuspension != null) {
+            properties.setProperty("isAllowPoolSuspension", isAllowPoolSuspension.toString());
+        }
+        String poolName = this.poolName == null ? hikariCpConfig.getPoolName() : this.poolName;
+        if (poolName != null && poolName.length() > 0) {
+            properties.setProperty("poolName", poolName);
+        }
+        String schema = this.schema == null ? hikariCpConfig.getSchema() : this.schema;
+        if (schema != null && schema.length() > 0) {
+            properties.setProperty("schema", schema);
+        }
+        String exceptionOverrideClassName = this.exceptionOverrideClassName == null ? hikariCpConfig.getExceptionOverrideClassName() : this.exceptionOverrideClassName;
+        if (exceptionOverrideClassName != null && exceptionOverrideClassName.length() > 0) {
+            properties.setProperty("exceptionOverrideClassName", exceptionOverrideClassName);
+        }
+        Long keepaliveTime = this.keepaliveTime == null ? hikariCpConfig.getKeepaliveTime() : this.keepaliveTime;
+        if (keepaliveTime != null) {
+            properties.setProperty("keepaliveTime", String.valueOf(keepaliveTime));
+        }
+        Boolean sealed = this.sealed == null ? hikariCpConfig.getSealed() : this.sealed;
+        if (sealed != null) {
+            properties.setProperty("sealed", sealed.toString());
+        }
+        return properties;
     }
 }

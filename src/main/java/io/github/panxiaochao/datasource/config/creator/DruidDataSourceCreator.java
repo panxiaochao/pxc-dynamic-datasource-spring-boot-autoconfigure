@@ -22,6 +22,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.ApplicationContext;
 
+import javax.annotation.Resource;
 import javax.sql.DataSource;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -38,8 +39,10 @@ import java.util.Properties;
 public class DruidDataSourceCreator implements DataSourceCreator, InitializingBean {
     private static final Logger LOGGER = LoggerFactory.getLogger(DruidDataSourceCreator.class);
 
+    @Resource
     private ApplicationContext applicationContext;
 
+    @Resource
     protected DynamicDataSourceProperties dataSourceProperties;
 
     private DruidConfig druidConfig;
@@ -48,12 +51,6 @@ public class DruidDataSourceCreator implements DataSourceCreator, InitializingBe
 
     public DruidDataSourceCreator() {
     }
-
-    public DruidDataSourceCreator(ApplicationContext applicationContext, DynamicDataSourceProperties dataSourceProperties) {
-        this.applicationContext = applicationContext;
-        this.dataSourceProperties = dataSourceProperties;
-    }
-
 
     /**
      * 构建DataSource
@@ -84,13 +81,11 @@ public class DruidDataSourceCreator implements DataSourceCreator, InitializingBe
         //设置druid内置properties不支持的的参数，额外参数
         this.setParam(dataSource, localConfig);
 
-        //if (Boolean.FALSE.equals(dataSourceProperty.getLazy())) {
         try {
             dataSource.init();
         } catch (SQLException e) {
             throw new DsException("buildDataSource create druid dataSource error", e);
         }
-        //}
         return dataSource;
     }
 

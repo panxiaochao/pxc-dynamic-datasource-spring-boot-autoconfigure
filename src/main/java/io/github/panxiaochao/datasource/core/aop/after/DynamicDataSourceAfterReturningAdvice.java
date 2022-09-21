@@ -8,17 +8,17 @@ import org.springframework.aop.AfterReturningAdvice;
 import java.lang.reflect.Method;
 
 /**
- * {@code CustomDoAfter}
- * <p>后置环绕
+ * {@code DynamicDataSourceAfterReturningAdvice}
+ * <p> 后置通知增强
  *
  * @author Lypxc
- * @since 2022/1/6
+ * @since 2022/09/21
  */
-public class CustomDoAfter implements AfterReturningAdvice {
-    private static final Logger LOGGER = LoggerFactory.getLogger(CustomDoAfter.class);
+public class DynamicDataSourceAfterReturningAdvice implements AfterReturningAdvice {
+    private static final Logger LOGGER = LoggerFactory.getLogger(DynamicDataSourceAfterReturningAdvice.class);
 
     /**
-     * 后置清楚数据源
+     * 清除当前线程使用数据源
      *
      * @param o
      * @param method
@@ -27,7 +27,7 @@ public class CustomDoAfter implements AfterReturningAdvice {
      */
     @Override
     public void afterReturning(Object o, Method method, Object[] args, Object target) {
-        LOGGER.info(">>> after clear datesource " + DynamicDataSourceContextHolder.get());
+        LOGGER.info(">>> after clear dateSource " + DynamicDataSourceContextHolder.get());
         DynamicDataSourceContextHolder.clear();
     }
 }

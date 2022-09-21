@@ -1,16 +1,12 @@
 package io.github.panxiaochao.datasource.boot.autoconfigure;
 
-import io.github.panxiaochao.datasource.common.properties.DsProperties;
 import io.github.panxiaochao.datasource.common.properties.DynamicDataSourceProperties;
 import io.github.panxiaochao.datasource.config.creator.DynamicDataSourceCreatorConfigure;
 import io.github.panxiaochao.datasource.config.druid.DynamicDruidDataSourceConfigure;
-import io.github.panxiaochao.datasource.core.aop.CustomDefaultPointcutAdvisor;
+import io.github.panxiaochao.datasource.core.aop.DynamicDataSourceDefaultPointcutAdvisor;
 import io.github.panxiaochao.datasource.core.factory.DynamicDataSourceBean;
 import io.github.panxiaochao.datasource.core.factory.YmlDynamicDataSourceBean;
 import io.github.panxiaochao.datasource.core.route.DynamicRoutingDataSource;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.aop.support.DefaultPointcutAdvisor;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -19,6 +15,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.core.annotation.Order;
 
 import javax.sql.DataSource;
 
@@ -38,11 +35,9 @@ import javax.sql.DataSource;
 @Configuration
 @EnableConfigurationProperties(DynamicDataSourceProperties.class)
 @AutoConfigureBefore(value = DataSourceAutoConfiguration.class, name = "com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceAutoConfigure")
-@Import(value = {DynamicDruidDataSourceConfigure.class, DynamicDataSourceCreatorConfigure.class})
-@ConditionalOnProperty(prefix = DsProperties.PXC_DATASOURCE_PREFIX, name = "enabled", havingValue = "true", matchIfMissing = true)
+@Import(value = {DynamicDruidDataSourceConfigure.class, DynamicDataSourceCreatorConfigure.class, DynamicDataSourceDefaultPointcutAdvisor.class})
+@ConditionalOnProperty(prefix = DynamicDataSourceProperties.PREFIX, name = "enabled", havingValue = "true", matchIfMissing = true)
 public class DynamicDataSourceAutoConfiguration {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(DynamicDataSourceAutoConfiguration.class);
 
     private final DynamicDataSourceProperties dynamicDataSourceProperties;
 
@@ -56,6 +51,7 @@ public class DynamicDataSourceAutoConfiguration {
      * @return DynamicDataSourceBean
      */
     @Bean
+    @Order(0)
     public DynamicDataSourceBean ymlDynamicDataSourceBean() {
         return new YmlDynamicDataSourceBean(dynamicDataSourceProperties.getDynamic());
     }
@@ -68,29 +64,6 @@ public class DynamicDataSourceAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean
     public DataSource dataSource() {
-        DynamicRoutingDataSource dataSource = new DynamicRoutingDataSource();
-        return dataSource;
-    }
-
-    /**
-     * 前置环绕
-     *
-     * @return DefaultPointcutAdvisor
-     */
-    @Bean
-    public DefaultPointcutAdvisor doBefore() {
-        String execution = "";
-        return CustomDefaultPointcutAdvisor.create(execution).doBefore();
-    }
-
-    /**
-     * 后置环绕
-     *
-     * @return DefaultPointcutAdvisor
-     */
-    @Bean
-    public DefaultPointcutAdvisor doAfter() {
-        String execution = "";
-        return CustomDefaultPointcutAdvisor.create(execution).doAfter();
+        return new DynamicRoutingDataSource();
     }
 }

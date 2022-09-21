@@ -11,6 +11,7 @@ import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.util.ReflectionUtils;
 
+import javax.annotation.Resource;
 import javax.sql.DataSource;
 import java.lang.reflect.Method;
 import java.util.HashMap;
@@ -29,21 +30,15 @@ public class DynamicRoutingDataSource extends AbstractDynamicRoutingDataSource i
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DynamicRoutingDataSource.class);
     /**
-     * 所有数据库
+     * 装载数据库
      */
     private final Map<String, DataSource> dataSourceMap = new ConcurrentHashMap<>();
 
     /**
      * 加载数据源的动态信息
      */
+    @Resource
     private List<DynamicDataSourceBean> dynamicDataSourceBeans;
-
-    public DynamicRoutingDataSource() {
-    }
-
-    public DynamicRoutingDataSource(List<DynamicDataSourceBean> dynamicDataSourceBeans) {
-        this.dynamicDataSourceBeans = dynamicDataSourceBeans;
-    }
 
     /**
      * 连接对象
@@ -65,11 +60,13 @@ public class DynamicRoutingDataSource extends AbstractDynamicRoutingDataSource i
     public DataSource getDataSource(String ds) {
         if (StringUtils.isEmpty(ds)) {
             return determinePrimaryDataSource();
-        } else if (dataSourceMap.containsKey(ds)) {
-            LOGGER.info("dynamic datasource switch to the datasource named [{}]", ds);
-            return dataSourceMap.get(ds);
         }
-        return determinePrimaryDataSource();
+        if (dataSourceMap.containsKey(ds)) {
+            LOGGER.info("dynamic dataSource switch to [{}]", ds);
+            return dataSourceMap.get(ds);
+        } else {
+            throw new DsException("please check the `spring.dataSource.dynamic.XX` equals to the @DSource(DsEnum.XX)");
+        }
     }
 
     /**
@@ -78,9 +75,9 @@ public class DynamicRoutingDataSource extends AbstractDynamicRoutingDataSource i
      * @return
      */
     private DataSource determinePrimaryDataSource() {
-        DataSource dataSource = dataSourceMap.get(DsEnum.MASTER.name());
+        DataSource dataSource = dataSourceMap.get(DsEnum.MASTER.getName());
         if (dataSource == null) {
-            throw new DsException("dynamic datasource can not find primary Master datasource");
+            throw new DsException("dynamic dataSource can not find primary Master dataSource");
         }
         return dataSource;
     }
@@ -97,7 +94,7 @@ public class DynamicRoutingDataSource extends AbstractDynamicRoutingDataSource i
         if (oldDataSource != null) {
             closeDataSource(ds, oldDataSource);
         }
-        LOGGER.info("dynamic datasource - add a datasource named [{}] success", ds);
+        LOGGER.info("dynamic dataSource - add dataSource key [{}] success", ds);
     }
 
     /**
@@ -113,8 +110,21 @@ public class DynamicRoutingDataSource extends AbstractDynamicRoutingDataSource i
                 closeMethod.invoke(dataSource);
             }
         } catch (Exception e) {
-            LOGGER.warn("dynamic datasource closed datasource named [{}] failed", ds, e);
+            LOGGER.warn("dynamic dataSource closed dataSource named [{}] failed", ds, e);
         }
+    }
+
+    /**
+     * 当销毁的时候，关闭数据源链接
+     *
+     * @throws Exception
+     */
+    @Override
+    public void destroy() throws Exception {
+        for (Map.Entry<String, DataSource> item : dataSourceMap.entrySet()) {
+            closeDataSource(item.getKey(), item.getValue());
+        }
+        LOGGER.info("dynamic dataSource all closed success");
     }
 
     @Override
@@ -128,19 +138,10 @@ public class DynamicRoutingDataSource extends AbstractDynamicRoutingDataSource i
             addDataSource(dsItem.getKey(), dsItem.getValue());
         }
         // 检测默认数据源是否设置
-        if (dataSourceMap.containsKey(DsEnum.MASTER.name())) {
-            LOGGER.info("dynamic datasource initial loaded [{}] datasource, primary datasource named [{}]", dataSources.size(), DsEnum.MASTER.name());
+        if (dataSourceMap.containsKey(DsEnum.MASTER.getName())) {
+            LOGGER.info("dynamic dataSource int loaded [{}] size dataSource", dataSources.size());
         } else {
-            throw new DsException("dynamic datasource can not find primary Master datasource");
+            throw new DsException("dynamic dataSource can not find primary Master dataSource");
         }
-    }
-
-    @Override
-    public void destroy() throws Exception {
-        LOGGER.info("dynamic-datasource start closing ....");
-        for (Map.Entry<String, DataSource> item : dataSourceMap.entrySet()) {
-            closeDataSource(item.getKey(), item.getValue());
-        }
-        LOGGER.info("dynamic-datasource all closed success,bye");
     }
 }

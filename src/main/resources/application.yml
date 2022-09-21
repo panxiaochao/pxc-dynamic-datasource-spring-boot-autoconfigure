@@ -4,5 +4,3 @@ spring:
 pxc:
   datasource:
     enabled: true
-    druid:
-      enabled: false
