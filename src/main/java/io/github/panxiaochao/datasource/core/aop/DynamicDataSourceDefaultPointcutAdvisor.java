@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.aop.Pointcut;
 import org.springframework.aop.aspectj.AspectJExpressionPointcut;
 import org.springframework.aop.support.DefaultPointcutAdvisor;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -28,6 +29,7 @@ import org.springframework.context.annotation.Configuration;
 @Getter
 @Configuration
 @RequiredArgsConstructor
+@ConditionalOnProperty(prefix = DynamicDataSourceProperties.PREFIX, name = "aop", havingValue = "true", matchIfMissing = true)
 public class DynamicDataSourceDefaultPointcutAdvisor {
     private static final Logger LOGGER = LoggerFactory.getLogger(DynamicDataSourceDefaultPointcutAdvisor.class);
 

@@ -27,7 +27,7 @@ public class PxcBanner {
         StringBuilder textBuilder = new StringBuilder();
         textBuilder.append(" __     __     __  __  __ \n");
         textBuilder.append("|__)\\_//   __ |  \\|  \\(_  \n");
-        textBuilder.append("|   / \\\\__    |__/|__/__) ");
+        textBuilder.append("|   / \\\\__    |__/|__/__) \n");
 
         version = version != null ? " (v" + version + ")" : "";
         int strapLineSize = (textBuilder.length() / 3) - (BOTTOM_INFO.length() + version.length()) - 2;

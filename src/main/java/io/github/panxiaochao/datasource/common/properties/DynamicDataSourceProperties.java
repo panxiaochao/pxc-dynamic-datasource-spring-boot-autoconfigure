@@ -56,7 +56,7 @@ public class DynamicDataSourceProperties implements InitializingBean {
     /**
      * 是否需要AOP，默认启用
      */
-    private Boolean aop = true;
+    private Boolean aop = Boolean.TRUE;
 
     /**
      * AOP 拦截自定义正则表达式
