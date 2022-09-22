@@ -76,15 +76,17 @@ public class DruidDataSourceCreator implements DataSourceCreator, InitializingBe
         dataSource.setProxyFilters(proxyFilters);
         // Properties 转化为 DruidDataSource属性
         dataSource.configFromPropety(properties);
-        //连接参数单独设置
+        // 连接参数单独设置
         dataSource.setConnectProperties(localConfig.getConnectionProperties());
-        //设置druid内置properties不支持的的参数，额外参数
+        // 设置druid内置properties不支持的的参数，额外参数
         this.setParam(dataSource, localConfig);
 
-        try {
-            dataSource.init();
-        } catch (SQLException e) {
-            throw new DsException("buildDataSource create druid dataSource error", e);
+        if (Boolean.FALSE.equals(dataSourceProperty.getLazy())) {
+            try {
+                dataSource.init();
+            } catch (SQLException e) {
+                throw new DsException("DruidDataSource create dataSource error", e);
+            }
         }
         return dataSource;
     }
@@ -227,9 +229,11 @@ public class DruidDataSourceCreator implements DataSourceCreator, InitializingBe
         return type == null || DRUID_DATASOURCE.equals(type.getName());
     }
 
+    /**
+     * 初始赋值属性
+     */
     @Override
-    public void afterPropertiesSet() throws Exception {
-        // 先获取属性
+    public void afterPropertiesSet() {
         druidConfig = dataSourceProperties.getDruid();
     }
 }

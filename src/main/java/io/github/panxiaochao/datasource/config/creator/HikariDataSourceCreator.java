@@ -35,6 +35,8 @@ public class HikariDataSourceCreator implements DataSourceCreator, InitializingB
 
     private HikariCpConfig hikariCpConfig;
 
+    private static final String POOL_NAME = "HikariPool-";
+
     static {
         fetchMethod();
     }
@@ -77,7 +79,7 @@ public class HikariDataSourceCreator implements DataSourceCreator, InitializingB
         config.setPassword(dataSourceProperty.getPassword());
         config.setJdbcUrl(dataSourceProperty.getUrl());
         if (StringUtils.isBlank(config.getPoolName())) {
-            config.setPoolName(dataSourceProperty.getPoolName());
+            config.setPoolName(POOL_NAME + dataSourceProperty.getPoolName());
         }
         String driverClassName = dataSourceProperty.getDriverClassName();
         if (StringUtils.isNotBlank(driverClassName)) {
@@ -89,6 +91,9 @@ public class HikariDataSourceCreator implements DataSourceCreator, InitializingB
         }
         if (localConfig.getHealthCheckProperties() != null) {
             config.setHealthCheckProperties(localConfig.getHealthCheckProperties());
+        }
+        if (Boolean.FALSE.equals(dataSourceProperty.getLazy())) {
+            return new HikariDataSource(config);
         }
         config.validate();
         HikariDataSource dataSource = new HikariDataSource();
@@ -112,8 +117,11 @@ public class HikariDataSourceCreator implements DataSourceCreator, InitializingB
         return type == null || HIKARI_DATASOURCE.equals(type.getName());
     }
 
+    /**
+     * 初始赋值属性
+     */
     @Override
-    public void afterPropertiesSet() throws Exception {
+    public void afterPropertiesSet() {
         hikariCpConfig = dataSourceProperties.getHikari();
     }
 }

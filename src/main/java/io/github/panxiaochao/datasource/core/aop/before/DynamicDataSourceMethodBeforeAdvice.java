@@ -3,8 +3,8 @@ package io.github.panxiaochao.datasource.core.aop.before;
 import io.github.panxiaochao.datasource.common.annotation.DSource;
 import io.github.panxiaochao.datasource.common.enums.DsEnum;
 import io.github.panxiaochao.datasource.core.holder.DynamicDataSourceContextHolder;
-import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 import org.springframework.aop.MethodBeforeAdvice;
 
 import java.lang.reflect.Method;

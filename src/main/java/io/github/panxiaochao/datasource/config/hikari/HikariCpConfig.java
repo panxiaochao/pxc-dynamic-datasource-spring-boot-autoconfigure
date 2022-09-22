@@ -31,11 +31,11 @@ public class HikariCpConfig {
     private String dataSourceClassName;
     private String dataSourceJndiName;
     private String transactionIsolationName;
-    private Boolean isAutoCommit;
-    private Boolean isReadOnly;
-    private Boolean isIsolateInternalQueries;
-    private Boolean isRegisterMbeans;
-    private Boolean isAllowPoolSuspension;
+    private Boolean autoCommit;
+    private Boolean readOnly;
+    private Boolean isolateInternalQueries;
+    private Boolean registerMbeans;
+    private Boolean allowPoolSuspension;
     private Properties dataSourceProperties;
     private Properties healthCheckProperties;
     private String poolName;
@@ -87,21 +87,19 @@ public class HikariCpConfig {
         }
         Integer maxPoolSize = this.maxPoolSize == null ? hikariCpConfig.getMaxPoolSize() : this.maxPoolSize;
         if (maxPoolSize != null) {
-            properties.setProperty("maxPoolSize", String.valueOf(maxPoolSize));
+            properties.setProperty("maximumPoolSize", String.valueOf(maxPoolSize));
         }
-        // 需要设置 maxPoolSize
         Integer maximumPoolSize = this.maximumPoolSize == null ? hikariCpConfig.getMaximumPoolSize() : this.maximumPoolSize;
         if (maximumPoolSize != null) {
-            properties.setProperty("maxPoolSize", String.valueOf(maximumPoolSize));
+            properties.setProperty("maximumPoolSize", String.valueOf(maximumPoolSize));
         }
         Integer minIdle = this.minIdle == null ? hikariCpConfig.getMinIdle() : this.minIdle;
         if (minIdle != null) {
-            properties.setProperty("minIdle", String.valueOf(minIdle));
+            properties.setProperty("minimumIdle", String.valueOf(minIdle));
         }
-        // 需要设置 minIdle
         Integer minimumIdle = this.minimumIdle == null ? hikariCpConfig.getMinimumIdle() : this.minimumIdle;
         if (minimumIdle != null) {
-            properties.setProperty("minIdle", String.valueOf(minimumIdle));
+            properties.setProperty("minimumIdle", String.valueOf(minimumIdle));
         }
         Long initializationFailTimeout =
                 this.initializationFailTimeout == null ? hikariCpConfig.getInitializationFailTimeout() : this.initializationFailTimeout;
@@ -130,25 +128,25 @@ public class HikariCpConfig {
         if (transactionIsolationName != null && transactionIsolationName.length() > 0) {
             properties.setProperty("transactionIsolationName", transactionIsolationName);
         }
-        Boolean isAutoCommit = this.isAutoCommit == null ? hikariCpConfig.getIsAutoCommit() : this.isAutoCommit;
-        if (isAutoCommit != null) {
-            properties.setProperty("isAutoCommit", isAutoCommit.toString());
+        Boolean autoCommit = this.autoCommit == null ? hikariCpConfig.getAutoCommit() : this.autoCommit;
+        if (autoCommit != null) {
+            properties.setProperty("autoCommit", autoCommit.toString());
         }
-        Boolean isReadOnly = this.isReadOnly == null ? hikariCpConfig.getIsReadOnly() : this.isReadOnly;
-        if (isReadOnly != null) {
-            properties.setProperty("isReadOnly", isReadOnly.toString());
+        Boolean readOnly = this.readOnly == null ? hikariCpConfig.getReadOnly() : this.readOnly;
+        if (readOnly != null) {
+            properties.setProperty("readOnly", readOnly.toString());
         }
-        Boolean isIsolateInternalQueries = this.isIsolateInternalQueries == null ? hikariCpConfig.getIsIsolateInternalQueries() : this.isIsolateInternalQueries;
-        if (isIsolateInternalQueries != null) {
-            properties.setProperty("isIsolateInternalQueries", isIsolateInternalQueries.toString());
+        Boolean isolateInternalQueries = this.isolateInternalQueries == null ? hikariCpConfig.getIsolateInternalQueries() : this.isolateInternalQueries;
+        if (isolateInternalQueries != null) {
+            properties.setProperty("isolateInternalQueries", isolateInternalQueries.toString());
         }
-        Boolean isRegisterMbeans = this.isRegisterMbeans == null ? hikariCpConfig.getIsRegisterMbeans() : this.isRegisterMbeans;
-        if (isRegisterMbeans != null) {
-            properties.setProperty("isRegisterMbeans", isRegisterMbeans.toString());
+        Boolean registerMbeans = this.registerMbeans == null ? hikariCpConfig.getRegisterMbeans() : this.registerMbeans;
+        if (registerMbeans != null) {
+            properties.setProperty("registerMbeans", registerMbeans.toString());
         }
-        Boolean isAllowPoolSuspension = this.isAllowPoolSuspension == null ? hikariCpConfig.getIsAllowPoolSuspension() : this.isAllowPoolSuspension;
-        if (isAllowPoolSuspension != null) {
-            properties.setProperty("isAllowPoolSuspension", isAllowPoolSuspension.toString());
+        Boolean allowPoolSuspension = this.allowPoolSuspension == null ? hikariCpConfig.getAllowPoolSuspension() : this.allowPoolSuspension;
+        if (allowPoolSuspension != null) {
+            properties.setProperty("allowPoolSuspension", allowPoolSuspension.toString());
         }
         String poolName = this.poolName == null ? hikariCpConfig.getPoolName() : this.poolName;
         if (poolName != null && poolName.length() > 0) {

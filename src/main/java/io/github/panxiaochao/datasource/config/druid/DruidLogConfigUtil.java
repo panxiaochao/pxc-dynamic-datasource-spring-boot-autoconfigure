@@ -17,8 +17,8 @@ package io.github.panxiaochao.datasource.config.druid;
 
 import com.alibaba.druid.filter.logging.LogFilter;
 import io.github.panxiaochao.datasource.utils.DsConfigUtil;
-import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 
 import java.lang.reflect.Method;
 import java.util.Map;

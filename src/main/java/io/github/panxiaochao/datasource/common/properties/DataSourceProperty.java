@@ -49,6 +49,11 @@ public class DataSourceProperty {
     private Class<? extends DataSource> type;
 
     /**
+     * lazy start
+     */
+    private Boolean lazy;
+
+    /**
      * DRUID 数据源配置
      */
     @NestedConfigurationProperty
